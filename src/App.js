@@ -34,15 +34,26 @@ class App extends Component {
         { name: event.target.value, age: 1 }
       ]
     });
-  }
-
+  };
+  
   render() {
+
+    const buttonStyle = {
+      backgroundColor: 'yellow',
+      border: '1px solid grey',
+      padding: '5px 10px',
+      borderRadius: '30px',
+      cursor: 'pointer'
+    };
+
     return (
       <div className="App">
         <h1>Hi, I am a react App</h1>
         <p>probably</p>
 
-        <button onClick={() => this.switchNameHandler("Anna the Great")}>
+        <button 
+          style={buttonStyle}
+          onClick={() => this.switchNameHandler("Anna the Great")}>
           click me to see the magic!
         </button>
 
