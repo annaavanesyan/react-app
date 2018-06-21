@@ -13,7 +13,8 @@ class App extends Component {
       { name: "Anna", money: "100$" },
       { name: "Narek", money: "10$" },
       { name: "Bobo", money: "1$" }
-    ]
+    ],
+    showPersons: false
   };
 
   switchNameHandler = newName => {
@@ -25,7 +26,7 @@ class App extends Component {
       ]
     });
   };
-  
+
   nameChangedHandler = event => {
     this.setState({
       people: [
@@ -35,15 +36,19 @@ class App extends Component {
       ]
     });
   };
-  
-  render() {
 
+  togglePersonsHandler = () => {
+    const doesShowPersons = this.state.showPersons;
+    this.setState({ showPersons: !doesShowPersons });
+  };
+
+  render() {
     const buttonStyle = {
-      backgroundColor: 'yellow',
-      border: '1px solid grey',
-      padding: '5px 10px',
-      borderRadius: '30px',
-      cursor: 'pointer'
+      backgroundColor: "yellow",
+      border: "1px solid grey",
+      padding: "5px 10px",
+      borderRadius: "30px",
+      cursor: "pointer"
     };
 
     return (
@@ -51,27 +56,31 @@ class App extends Component {
         <h1>Hi, I am a react App</h1>
         <p>probably</p>
 
-        <button 
-          style={buttonStyle}
-          onClick={() => this.switchNameHandler("Anna the Great")}>
-          click me to see the magic!
+        <button style={buttonStyle} onClick={this.togglePersonsHandler}>
+          toggle persons
         </button>
-
-        <Person name={this.state.people[0].name} age={this.state.people[0].age}>
-          Money: {this.state.money[0].money}
-        </Person>
-        <Person
-          name={this.state.people[1].name}
-          age={this.state.people[1].age}
-          changeName={this.switchNameHandler.bind(this, "Anna!")}
-        >
-          Money: {this.state.money[1].money}
-        </Person>
-        <Person
-          name={this.state.people[2].name}
-          age={this.state.people[2].age}
-          insertName={this.nameChangedHandler}
-        />
+        {this.state.showPersons ? (
+          <div>
+            <Person
+              name={this.state.people[0].name}
+              age={this.state.people[0].age}
+            >
+              Money: {this.state.money[0].money}
+            </Person>
+            <Person
+              name={this.state.people[1].name}
+              age={this.state.people[1].age}
+              changeName={this.switchNameHandler.bind(this, "Anna!")}
+            >
+              Money: {this.state.money[1].money}
+            </Person>
+            <Person
+              name={this.state.people[2].name}
+              age={this.state.people[2].age}
+              insertName={this.nameChangedHandler}
+            />
+          </div>
+        ) : null}
       </div>
     );
   }
