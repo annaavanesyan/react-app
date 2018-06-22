@@ -17,16 +17,6 @@ class App extends Component {
     showPersons: false
   };
 
-  switchNameHandler = newName => {
-    this.setState({
-      people: [
-        { name: newName, age: 20 },
-        { name: "Narek", age: 24 },
-        { name: "Bobosik", age: 1 }
-      ]
-    });
-  };
-
   nameChangedHandler = event => {
     this.setState({
       people: [
@@ -42,6 +32,12 @@ class App extends Component {
     this.setState({ showPersons: !doesShowPersons });
   };
 
+  deletePersonHandler = personIndex => {
+    const people = this.state.people;
+    people.splice(personIndex, 1);
+    this.setState({people: people});
+  };
+
   render() {
     const buttonStyle = {
       backgroundColor: "yellow",
@@ -51,6 +47,23 @@ class App extends Component {
       cursor: "pointer"
     };
 
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          {this.state.people.map((person, index) => {
+            return (
+              <Person
+                delete={() => this.deletePersonHandler(index)}
+                name={person.name}
+                age={person.age}
+              />
+            );
+          })}
+        </div>
+      );
+    }
     return (
       <div className="App">
         <h1>Hi, I am a react App</h1>
@@ -59,28 +72,7 @@ class App extends Component {
         <button style={buttonStyle} onClick={this.togglePersonsHandler}>
           toggle persons
         </button>
-        {this.state.showPersons ? (
-          <div>
-            <Person
-              name={this.state.people[0].name}
-              age={this.state.people[0].age}
-            >
-              Money: {this.state.money[0].money}
-            </Person>
-            <Person
-              name={this.state.people[1].name}
-              age={this.state.people[1].age}
-              changeName={this.switchNameHandler.bind(this, "Anna!")}
-            >
-              Money: {this.state.money[1].money}
-            </Person>
-            <Person
-              name={this.state.people[2].name}
-              age={this.state.people[2].age}
-              insertName={this.nameChangedHandler}
-            />
-          </div>
-        ) : null}
+        {persons}
       </div>
     );
   }
