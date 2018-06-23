@@ -5,27 +5,18 @@ import Person from "./Person/Person";
 class App extends Component {
   state = {
     people: [
-      { name: "Anna", age: 20 },
-      { name: "Narek", age: 23 },
-      { name: "Bobo", age: 1 }
+      { id: "a1", name: "Anna", age: 20 },
+      { id: "a2", name: "Narek", age: 23 },
+      { id: "a3", name: "Bobo", age: 1 }
     ],
     money: [
       { name: "Anna", money: "100$" },
       { name: "Narek", money: "10$" },
       { name: "Bobo", money: "1$" }
-    ]
+    ],
+    showPersons: false
   };
 
-  switchNameHandler = newName => {
-    this.setState({
-      people: [
-        { name: newName, age: 20 },
-        { name: "Narek", age: 24 },
-        { name: "Bobosik", age: 1 }
-      ]
-    });
-  };
-  
   nameChangedHandler = event => {
     this.setState({
       people: [
@@ -35,43 +26,54 @@ class App extends Component {
       ]
     });
   };
-  
-  render() {
 
+  togglePersonsHandler = () => {
+    const doesShowPersons = this.state.showPersons;
+    this.setState({ showPersons: !doesShowPersons });
+  };
+
+  deletePersonHandler = personIndex => {
+    const people = [...this.state.people];
+    people.splice(personIndex, 1);
+    this.setState({people: people});
+  };
+
+  render() {
     const buttonStyle = {
-      backgroundColor: 'yellow',
-      border: '1px solid grey',
-      padding: '5px 10px',
-      borderRadius: '30px',
-      cursor: 'pointer'
+      backgroundColor: "yellow",
+      border: "1px solid grey",
+      padding: "5px 10px",
+      borderRadius: "30px",
+      cursor: "pointer"
     };
 
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          {this.state.people.map((person, index) => {
+            return (
+              <Person
+                delete={() => this.deletePersonHandler(index)}
+                name={person.name}
+                age={person.age}
+                key={person.id}
+              />
+            );
+          })}
+        </div>
+      );
+    }
     return (
       <div className="App">
         <h1>Hi, I am a react App</h1>
         <p>probably</p>
 
-        <button 
-          style={buttonStyle}
-          onClick={() => this.switchNameHandler("Anna the Great")}>
-          click me to see the magic!
+        <button style={buttonStyle} onClick={this.togglePersonsHandler}>
+          toggle persons
         </button>
-
-        <Person name={this.state.people[0].name} age={this.state.people[0].age}>
-          Money: {this.state.money[0].money}
-        </Person>
-        <Person
-          name={this.state.people[1].name}
-          age={this.state.people[1].age}
-          changeName={this.switchNameHandler.bind(this, "Anna!")}
-        >
-          Money: {this.state.money[1].money}
-        </Person>
-        <Person
-          name={this.state.people[2].name}
-          age={this.state.people[2].age}
-          insertName={this.nameChangedHandler}
-        />
+        {persons}
       </div>
     );
   }
